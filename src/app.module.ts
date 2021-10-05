@@ -15,7 +15,7 @@ import { BoxesService } from './boxes/boxes.service';
 
 @Module({
   imports: [
-    CatsModule,
+    // CatsModule,
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: false,
@@ -28,6 +28,6 @@ import { BoxesService } from './boxes/boxes.service';
     WarehousesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, BoxesService, WarehousesService],
+  providers: [AppService],
 })
 export class AppModule {}

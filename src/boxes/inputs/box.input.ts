@@ -3,9 +3,7 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 @InputType()
 export class BoxInput {
   @Field()
-  readonly name: string;
-  @Field(() => Int)
-  readonly age: string;
+  name: string;
   @Field()
-  readonly breed: string;
+  description: string;
 }

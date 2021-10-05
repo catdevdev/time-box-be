@@ -17,4 +17,4 @@ export class Box {
   warehouse: Warehouse;
 }
 
-export const CatSchema = SchemaFactory.createForClass(Warehouse);
+export const BoxSchema = SchemaFactory.createForClass(Warehouse);

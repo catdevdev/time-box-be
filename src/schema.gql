@@ -2,25 +2,47 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CatType {
-  _id: ID!
+type BoxType {
+  id: ID!
   name: String!
-  age: Int!
-  breed: String!
+  description: String!
+}
+
+type Location {
+  latitude: Float!
+  longitude: Float!
+}
+
+type WarehouseType {
+  id: ID!
+  name: String!
+  location: Location!
 }
 
 type Query {
   hello: String!
-  cats: [CatType!]!
-  cat(name: String!): [CatType!]!
+  boxes: [BoxType!]!
+  box(name: String!): [BoxType!]!
+  warehouses: [WarehouseType!]!
+  warehouse(name: String!): [WarehouseType!]!
 }
 
 type Mutation {
-  createCat(input: CatInput!): CatType!
+  createBox(input: BoxInput!): BoxType!
+  createdWarehouse(input: WarehouseInput!): WarehouseType!
 }
 
-input CatInput {
+input BoxInput {
   name: String!
-  age: Int!
-  breed: String!
+  description: String!
+}
+
+input WarehouseInput {
+  name: String!
+  location: LocationInput!
+}
+
+input LocationInput {
+  latitude: Float!
+  longitude: Float!
 }
