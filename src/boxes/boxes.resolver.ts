@@ -12,17 +12,17 @@ export class BoxesResolver {
     return 'Hello World!';
   }
   @Query(() => [BoxType])
-  async cats() {
+  async boxes() {
     return this.catsService.findAll();
   }
 
   @Query(() => [BoxType])
-  async cat(@Args('name') input: string) {
+  async box(@Args('name') input: string) {
     return this.catsService.findByName(input);
   }
 
   @Mutation(() => BoxType)
-  async createCat(@Args('input') input: BoxInput) {
+  async createBox(@Args('input') input: BoxInput) {
     return this.catsService.create(input);
   }
 }

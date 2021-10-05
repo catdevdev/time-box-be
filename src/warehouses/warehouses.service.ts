@@ -11,8 +11,9 @@ export class WarehousesService {
     private warehouseModel: Model<WarehouseDocument>,
   ) {}
 
-  async create(createBoxDto: WarehouseInput): Promise<Warehouse> {
-    const createdWarehouse = new this.warehouseModel(createBoxDto);
+  async create(warehouseInput: WarehouseInput): Promise<Warehouse> {
+    const createdWarehouse = new this.warehouseModel(warehouseInput);
+    console.log(createdWarehouse);
     return createdWarehouse.save();
   }
   async findAll(): Promise<Warehouse[]> {

@@ -9,20 +9,21 @@ export class WarehousesResolver {
 
   @Query(() => String)
   async hello() {
-    return 'Hello World!';
+    return 'Hello 45!';
   }
   @Query(() => [WarehouseType])
-  async cats() {
+  async warehouses() {
     return this.warehousesService.findAll();
   }
 
   @Query(() => [WarehouseType])
-  async cat(@Args('name') input: string) {
+  async warehouse(@Args('name') input: string) {
     return this.warehousesService.findByName(input);
   }
 
   @Mutation(() => WarehouseType)
-  async createCat(@Args('input') input: WarehouseInput) {
+  async createdWarehouse(@Args('input') input: WarehouseInput) {
+    console.log(input);
     return this.warehousesService.create(input);
   }
 }

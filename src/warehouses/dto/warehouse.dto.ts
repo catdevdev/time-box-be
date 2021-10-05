@@ -1,13 +1,17 @@
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-export type Coordinates = { longitude: number; latitude: number };
+@ObjectType()
+class Location {
+  @Field() latitude: number;
+  @Field() longitude: number;
+}
 
 @ObjectType()
 export class WarehouseType {
   @Field(() => ID)
-  _id: string;
+  id: string;
   @Field()
   name: string;
-  @Field()
-  coordinates: Coordinates;
+  @Field(() => Location)
+  location: Location;
 }
