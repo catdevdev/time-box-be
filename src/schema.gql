@@ -12,6 +12,7 @@ type CatType {
 type Query {
   hello: String!
   cats: [CatType!]!
+  cat(name: String!): [CatType!]!
 }
 
 type Mutation {
