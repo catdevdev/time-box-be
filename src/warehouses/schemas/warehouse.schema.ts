@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type CatDocument = Warehouse & Document;
+export type WarehouseDocument = Warehouse & Document;
 
 type Coordinates = { longitude: number; latitude: number };
 
@@ -9,7 +9,7 @@ type Coordinates = { longitude: number; latitude: number };
 export class Warehouse {
   @Prop()
   name: string;
-  @Prop()
+  @Prop({ type: { longitude: Number, latitude: Number } })
   coordinates: Coordinates;
 }
 
