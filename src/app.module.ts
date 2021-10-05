@@ -6,11 +6,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-import { BoxsResolver } from './boxs/boxs.resolver';
-import { BoxsModule } from './boxs/boxs.module';
 import { BoxesModule } from './boxes/boxes.module';
-import { WarehouseModule } from './warehouse/warehouse.module';
 import { WarehousesModule } from './warehouses/warehouses.module';
+import { WarehousesService } from './warehouses/warehouses.service';
+import { BoxesService } from './boxes/boxes.service';
+// import { BoxesResolver } from './boxes/boxes.resolver';
+// import { WarehousesResolver } from './warehouses/warehouses.resolver';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { WarehousesModule } from './warehouses/warehouses.module';
     WarehousesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, BoxsResolver],
+  providers: [AppService, BoxesService, WarehousesService],
 })
 export class AppModule {}
