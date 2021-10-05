@@ -2,8 +2,8 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type CreateCatDto {
-  id: ID!
+type CatType {
+  _id: ID!
   name: String!
   age: Int!
   breed: String!
@@ -11,10 +11,11 @@ type CreateCatDto {
 
 type Query {
   hello: String!
+  cats: [CatType!]!
 }
 
 type Mutation {
-  createCat(input: CatInput!): CreateCatDto!
+  createCat(input: CatInput!): CatType!
 }
 
 input CatInput {
