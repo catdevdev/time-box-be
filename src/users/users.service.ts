@@ -1,8 +1,8 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Warehouse, WarehouseDocument } from './schemas/warehouse.schema';
-import { WarehouseInput } from './inputs/warehouse.input';
+import { Warehouse, WarehouseDocument } from './schemas/user.schema';
+import { WarehouseInput } from './inputs/user.input';
 
 @Injectable()
 export class WarehousesService {

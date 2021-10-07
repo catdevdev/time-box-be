@@ -4,6 +4,7 @@ import { BoxesResolver } from './boxes.resolver';
 import { BoxesService } from './boxes.service';
 import { Box, BoxSchema } from './schemas/box.schema';
 
+
 @Module({
   imports: [MongooseModule.forFeature([{ name: Box.name, schema: BoxSchema }])],
   providers: [BoxesResolver, BoxesService],

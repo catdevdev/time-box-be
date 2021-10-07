@@ -7,10 +7,6 @@ import { BoxInput } from './inputs/box.input';
 export class BoxesResolver {
   constructor(private catsService: BoxesService) {}
 
-  @Query(() => String)
-  async hello() {
-    return 'Hello World!';
-  }
   @Query(() => [BoxType])
   async boxes() {
     return this.catsService.findAll();

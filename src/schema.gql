@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type BoxType {
-  id: ID!
-  name: String!
-  description: String!
-}
-
 type Location {
   latitude: Float!
   longitude: Float!
@@ -17,12 +11,20 @@ type WarehouseType {
   id: ID!
   name: String!
   location: Location!
+  boxes: [BoxType!]!
+}
+
+type BoxType {
+  id: ID!
+  name: String!
+  description: String!
+  warehouse: WarehouseType!
 }
 
 type Query {
-  hello: String!
   boxes: [BoxType!]!
   box(name: String!): [BoxType!]!
+  hello: String!
   warehouses: [WarehouseType!]!
   warehouse(name: String!): [WarehouseType!]!
 }
@@ -35,6 +37,7 @@ type Mutation {
 input BoxInput {
   name: String!
   description: String!
+  warehouse: String!
 }
 
 input WarehouseInput {
