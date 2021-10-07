@@ -2,18 +2,12 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { BoxType } from 'src/boxes/dto/box.dto';
 
 @ObjectType()
-class Location {
-  @Field() latitude: number;
-  @Field() longitude: number;
-}
-
-@ObjectType()
-export class WarehouseType {
+export class UserType {
   @Field(() => ID)
   id: string;
   @Field()
-  name: string;
-  @Field(() => Location)
-  location: Location;
+  username: string;
+  @Field()
+  password: string;
   @Field(() => [BoxType]) boxes: BoxType[];
 }

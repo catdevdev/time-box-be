@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class BoxInput {
@@ -6,4 +6,6 @@ export class BoxInput {
   name: string;
   @Field()
   description: string;
+  @Field()
+  warehouse: string;
 }
