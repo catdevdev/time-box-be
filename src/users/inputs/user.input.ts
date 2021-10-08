@@ -1,15 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-class LocationInput {
-  @Field() latitude: number;
-  @Field() longitude: number;
-}
-
-@InputType()
-export class WarehouseInput {
+export class UserInput {
   @Field()
   name: string;
   @Field()
-  location: LocationInput;
+  password: string;
 }

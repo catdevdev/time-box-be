@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
-import { WarehousesService } from './users.service';
-import { WarehousesResolver } from './users.resolver';
+import { UsersService } from './users.service';
+import { UsersResolver } from './users.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Warehouse, WarehouseSchema } from './schemas/user.schema';
+import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Warehouse.name, schema: WarehouseSchema },
+      { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [WarehousesService, WarehousesResolver],
+  providers: [UsersService, UsersResolver],
 })
 export class UsersModule {}
