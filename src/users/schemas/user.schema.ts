@@ -1,28 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import * as mongoose from 'mongoose';
-import { Box } from 'src/boxes/schemas/box.schema';
 
-export type WarehouseDocument = Warehouse & Document;
+export type UsersDocument = User & Document;
 
-@Schema()
-export class Location {
-  @Prop() longitude: number;
-  @Prop() latitude: number;
-}
 
 @Schema()
-export class Warehouse {
+export class User {
   @Prop() name: string;
-  @Prop({ type: Location }) location: Location;
-  // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Box' })
-  // boxes: Box[];
+  @Prop() password: string;
 }
 
-export const WarehouseSchema = SchemaFactory.createForClass(Warehouse);
-
-WarehouseSchema.virtual("boxes", {
-  ref: "Box",
-  localField: '_id',
-  foreignField: 'warehouse',
-})
+export const UserSchema = SchemaFactory.createForClass(User);
