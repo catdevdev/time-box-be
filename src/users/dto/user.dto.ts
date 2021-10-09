@@ -9,5 +9,5 @@ export class UserType {
   username: string;
   @Field()
   password: string;
-  @Field(() => [BoxType]) boxes: BoxType[];
+  // @Field(() => [BoxType]) boxes: BoxType[];
 }

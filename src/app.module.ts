@@ -13,6 +13,7 @@ import { BoxesService } from './boxes/boxes.service';
 import { UsersModule } from './users/users.module';
 // import { BoxesResolver } from './boxes/boxes.resolver';
 // import { WarehousesResolver } from './warehouses/warehouses.resolver';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { UsersModule } from './users/users.module';
     ),
     BoxesModule,
     WarehousesModule,
-    UsersModule 
+    UsersModule,
+    AuthModule 
   ],
   controllers: [AppController],
   providers: [AppService],

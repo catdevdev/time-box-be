@@ -6,8 +6,6 @@ import { Warehouse } from 'src/warehouses/schemas/warehouse.schema';
 
 export type BoxDocument = Box & Document;
 
-console.log(Warehouse);
-
 @Schema()
 export class Box {
   @Prop() name: string;
