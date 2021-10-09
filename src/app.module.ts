@@ -4,15 +4,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsModule } from './cats/cats.module';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { BoxesModule } from './boxes/boxes.module';
 import { WarehousesModule } from './warehouses/warehouses.module';
 import { WarehousesService } from './warehouses/warehouses.service';
 import { BoxesService } from './boxes/boxes.service';
 import { UsersModule } from './users/users.module';
-// import { BoxesResolver } from './boxes/boxes.resolver';
-// import { WarehousesResolver } from './warehouses/warehouses.resolver';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -29,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
     BoxesModule,
     WarehousesModule,
     UsersModule,
-    AuthModule 
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

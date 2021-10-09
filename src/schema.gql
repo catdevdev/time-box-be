@@ -2,6 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserType {
+  id: ID!
+  username: String!
+  password: String!
+  boxes: [BoxType!]!
+}
+
 type Location {
   latitude: Float!
   longitude: Float!
@@ -19,12 +26,7 @@ type BoxType {
   name: String!
   description: String!
   warehouse: WarehouseType!
-}
-
-type UserType {
-  id: ID!
-  username: String!
-  password: String!
+  user: UserType!
 }
 
 type Query {
@@ -47,6 +49,7 @@ input BoxInput {
   name: String!
   description: String!
   warehouse: String!
+  user: String!
 }
 
 input WarehouseInput {

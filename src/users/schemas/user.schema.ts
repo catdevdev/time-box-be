@@ -10,3 +10,9 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.virtual('boxes', {
+  ref: 'Box',
+  localField: '_id',
+  foreignField: 'user',
+});

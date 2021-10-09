@@ -17,7 +17,7 @@ export class BoxesService {
     return createdBox.save();
   }
   async findAll(): Promise<Box[]> {
-    return this.boxModel.find().populate('warehouse').exec();
+    return this.boxModel.find().populate('warehouse').populate('user').exec();
   }
   async findByName(name: string): Promise<Box[]> {
     return this.boxModel.find({ name }).exec();
