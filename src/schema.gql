@@ -25,7 +25,6 @@ type UserType {
   id: ID!
   username: String!
   password: String!
-  boxes: [BoxType!]!
 }
 
 type Query {
@@ -35,6 +34,7 @@ type Query {
   warehouses: [WarehouseType!]!
   warehouse(name: String!): [WarehouseType!]!
   users: [UserType!]!
+  getUser: UserType!
 }
 
 type Mutation {
@@ -60,6 +60,6 @@ input LocationInput {
 }
 
 input UserInput {
-  name: String!
+  username: String!
   password: String!
 }

@@ -23,7 +23,6 @@ export class WarehousesResolver {
 
   @Mutation(() => WarehouseType)
   async createdWarehouse(@Args('input') input: WarehouseInput) {
-    console.log(input);
     return this.warehousesService.create(input);
   }
 }
