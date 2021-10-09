@@ -8,4 +8,6 @@ export class BoxInput {
   description: string;
   @Field()
   warehouse: string;
+  @Field()
+  user: string;
 }
