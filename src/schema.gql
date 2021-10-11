@@ -32,7 +32,6 @@ type BoxType {
 type Query {
   boxes: [BoxType!]!
   box(name: String!): [BoxType!]!
-  hello: String!
   warehouses: [WarehouseType!]!
   warehouse(name: String!): [WarehouseType!]!
   users: [UserType!]!
@@ -65,4 +64,8 @@ input LocationInput {
 input UserInput {
   username: String!
   password: String!
+}
+
+type Subscription {
+  warehoused: Float!
 }
