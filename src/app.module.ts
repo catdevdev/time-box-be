@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      installSubscriptionHandlers: true,
     }),
     MongooseModule.forRoot(
       'mongodb+srv://cat:4311067vladvk@cluster0.e6s6i.gcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',

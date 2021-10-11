@@ -15,8 +15,6 @@ export class Location {
 export class Warehouse {
   @Prop() name: string;
   @Prop({ type: Location }) location: Location;
-  // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Box' })
-  // boxes: Box[];
 }
 
 export const WarehouseSchema = SchemaFactory.createForClass(Warehouse);
