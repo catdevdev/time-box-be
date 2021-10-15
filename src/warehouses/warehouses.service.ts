@@ -13,12 +13,13 @@ export class WarehousesService {
 
   async create(warehouseInput: WarehouseInput): Promise<Warehouse> {
     const createdWarehouse = new this.warehouseModel(warehouseInput);
+    console.log(createdWarehouse);
     return createdWarehouse.save();
   }
   async findAll(): Promise<Warehouse[]> {
     return this.warehouseModel.find().populate('boxes').exec();
   }
-  async findByName(name: string): Promise<Warehouse[]> {
-    return this.warehouseModel.find({ name }).exec();
+  async findByID(id: string): Promise<Warehouse[]> {
+    return this.warehouseModel.find({ _id: id }).exec();
   }
 }

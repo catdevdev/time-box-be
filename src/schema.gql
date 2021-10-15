@@ -25,21 +25,44 @@ type BoxType {
   id: ID!
   name: String!
   description: String!
-  warehouse: WarehouseType!
+  placement: Float
+  warehouse: WarehouseType
   user: UserType!
+}
+
+type PositionType {
+  x: Float!
+  y: Float!
+  z: Float!
+}
+
+type BoxPositionType {
+  position: PositionType!
+}
+
+type TransportSubstrateType {
+  position: PositionType!
+  warehouseId: String!
+  speed: Float!
 }
 
 type Query {
   boxes: [BoxType!]!
   box(name: String!): [BoxType!]!
   warehouses: [WarehouseType!]!
-  warehouse(name: String!): [WarehouseType!]!
+  warehouse(id: String!): [WarehouseType!]!
+  boxPositions: [BoxPositionType!]!
+  transportSubstratePositions: [TransportSubstrateType!]!
+  transportSubstratePosition(warehouseId: String!): TransportSubstrateType!
+  testOdessa: String!
+  testKyiv: String!
   users: [UserType!]!
   getUser: UserType!
 }
 
 type Mutation {
   createBox(input: BoxInput!): BoxType!
+  addPlacementForBox(input: AddPlacementForBoxInput!): BoxType!
   createdWarehouse(input: WarehouseInput!): WarehouseType!
   createUser(input: UserInput!): UserType!
 }
@@ -47,8 +70,13 @@ type Mutation {
 input BoxInput {
   name: String!
   description: String!
-  warehouse: String!
   user: String!
+}
+
+input AddPlacementForBoxInput {
+  boxId: String!
+  placement: Float!
+  warehouseId: String!
 }
 
 input WarehouseInput {
@@ -67,5 +95,9 @@ input UserInput {
 }
 
 type Subscription {
-  warehoused: Float!
+  moveTransport(input: MoveTransportInput!): TransportSubstrateType!
+}
+
+input MoveTransportInput {
+  warehouseId: String!
 }

@@ -13,14 +13,15 @@ export class Location {
 
 @Schema()
 export class Warehouse {
+  @Prop() _id: string;
   @Prop() name: string;
   @Prop({ type: Location }) location: Location;
 }
 
 export const WarehouseSchema = SchemaFactory.createForClass(Warehouse);
 
-WarehouseSchema.virtual("boxes", {
-  ref: "Box",
+WarehouseSchema.virtual('boxes', {
+  ref: 'Box',
   localField: '_id',
   foreignField: 'warehouse',
-})
+});
