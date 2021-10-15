@@ -9,14 +9,10 @@ import { WarehouseType } from 'src/warehouses/dto/warehouse.dto';
 
 @ObjectType()
 export class BoxType {
-  @Field(() => ID)
-  id: string;
-  @Field()
-  name: string;
-  @Field()
-  description: string;
-  @Field(() => WarehouseType)
-  warehouse: WarehouseType;
-  @Field(() => UserType)
-  user: UserType;
+  @Field(() => ID) id: string;
+  @Field() name: string;
+  @Field() description: string;
+  @Field({ nullable: true }) placement: number;
+  @Field(() => WarehouseType, { nullable: true }) warehouse: WarehouseType;
+  @Field(() => UserType) user: UserType;
 }

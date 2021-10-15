@@ -22,4 +22,15 @@ export class BoxesService {
   async findByName(name: string): Promise<Box[]> {
     return this.boxModel.find({ name }).exec();
   }
+
+  async addPlacementForBox(
+    boxId: string,
+    placement: number,
+    warehouseId: string,
+  ): Promise<Box> {
+    return this.boxModel.findOneAndUpdate(
+      { _id: boxId },
+      { placement, warehouseId },
+    );
+  }
 }

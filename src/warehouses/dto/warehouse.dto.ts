@@ -17,3 +17,13 @@ export class WarehouseType {
   location: Location;
   @Field(() => [BoxType]) boxes: BoxType[];
 }
+
+@ObjectType()
+export class PositionType {
+  @Field()
+  x: number;
+  @Field()
+  y: number;
+  @Field()
+  z: number;
+}

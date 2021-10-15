@@ -11,6 +11,7 @@ export type BoxDocument = Box & Document;
 export class Box {
   @Prop() name: string;
   @Prop() description: string;
+  @Prop() placement: number;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Warehouse.name })
   warehouse: Warehouse;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })

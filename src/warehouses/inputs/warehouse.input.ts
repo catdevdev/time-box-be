@@ -13,3 +13,9 @@ export class WarehouseInput {
   @Field()
   location: LocationInput;
 }
+
+@InputType()
+export class MoveTransportInput {
+  @Field()
+  warehouseId: string;
+}
