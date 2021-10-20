@@ -33,6 +33,7 @@
     "apollo-server-core": "^3.3.0",
     "apollo-server-express": "^3.3.0",
     "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "graphql": "^15.6.0",
     "graphql-subscriptions": "^1.2.1",
     "mongoose": "^6.0.8",
