@@ -57,7 +57,7 @@ type Query {
   testOdessa: String!
   testKyiv: String!
   users: [UserType!]!
-  getUser: UserType!
+  me: UserType!
 }
 
 type Mutation {

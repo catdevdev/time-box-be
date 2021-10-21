@@ -22,6 +22,6 @@ export class UsersService {
   }
 
   async findOneByName(username: string): Promise<User> {
-    return this.userModel.findOne({ username }).exec();
+    return this.userModel.findOne({ username }).populate('boxes').exec();
   }
 }
