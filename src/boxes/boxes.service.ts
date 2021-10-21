@@ -16,6 +16,15 @@ export class BoxesService {
     const createdBox = new this.boxModel(boxInput);
     return createdBox.save();
   }
+
+  async findAllByUserId(userId: string): Promise<Box[]> {
+    console.log(userId)
+    return this.boxModel
+      .find({ "user.id": userId })
+      .populate('warehouse')
+      .populate('user')
+      .exec();
+  }
   async findAll(): Promise<Box[]> {
     return this.boxModel.find().populate('warehouse').populate('user').exec();
   }

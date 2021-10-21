@@ -20,7 +20,7 @@ export class UsersResolver {
 
   @Query(() => UserType)
   @UseGuards(GqlAuthGuard)
-  async getUser(@CurrentUser() currentUser: User) {
+  async me(@CurrentUser() currentUser: User) {
     return this.usersService.findOneByName(currentUser.username);
   }
 
