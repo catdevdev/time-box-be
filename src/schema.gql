@@ -63,6 +63,7 @@ type Query {
 type Mutation {
   createBox(input: BoxInput!): BoxType!
   addPlacementForBox(input: AddPlacementForBoxInput!): BoxType!
+  uploadFile(file: Upload!): Boolean!
   createdWarehouse(input: WarehouseInput!): WarehouseType!
   createUser(input: UserInput!): UserType!
 }
@@ -78,6 +79,9 @@ input AddPlacementForBoxInput {
   placement: Float!
   warehouseId: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input WarehouseInput {
   name: String!
