@@ -5,22 +5,15 @@ import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { User } from 'src/users/schemas/user.schema';
 import { BoxesService } from './boxes.service';
 import { BoxType } from './dto/box.dto';
-import { AddPlacementForBoxInput, BoxInput } from './inputs/box.input';
-
-import { GraphQLUpload, FileUpload } from 'graphql-upload';
-import { createWriteStream } from 'fs';
-
+import {
+  AddNoteIntoBoxInput,
+  AddPlacementForBoxInput,
+  BoxInput,
+} from './inputs/box.input';
 
 @Resolver()
 export class BoxesResolver {
-  constructor(private boxesService: BoxesService) { }
-
-  // @UseGuards(GqlAuthGuard)
-  // @Query(() => [BoxType])
-  // async myBoxes(@CurrentUser() currentUser: User) {
-  //   console.log(currentUser);
-  //   return this.boxesService.findAllByUserId(currentUser._id);
-  // }
+  constructor(private boxesService: BoxesService) {}
 
   @Query(() => [BoxType])
   async boxes() {
@@ -33,9 +26,17 @@ export class BoxesResolver {
     return this.boxesService.findByName(input);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => BoxType)
-  async createBox(@Args('input') input: BoxInput) {
-    return this.boxesService.create(input);
+  async createBox(
+    @Args('input') input: BoxInput,
+    @CurrentUser() currentUser: User,
+  ) {
+    return this.boxesService.create(
+      input.name,
+      input.description,
+      currentUser._id,
+    );
   }
 
   @Mutation(() => BoxType)
@@ -46,17 +47,9 @@ export class BoxesResolver {
       input.warehouseId,
     );
   }
-  @Mutation(() => Boolean)
-  async uploadFile(@Args({name: 'file', type: () => GraphQLUpload})
-  {
-      createReadStream,
-      filename
-  }: FileUpload): Promise<boolean> {
-      return new Promise(async (resolve, reject) => 
-          createReadStream()
-              .pipe(createWriteStream(`./uploads/${filename}`))
-              .on('finish', () => resolve(true))
-              .on('error', () => reject(false))
-      );
+
+  @Mutation(() => BoxType)
+  async addNoteIntoBox(@Args('input') input: AddNoteIntoBoxInput) {
+    return this.boxesService.addNoteIntoBox(input.boxId, input.note);
   }
 }

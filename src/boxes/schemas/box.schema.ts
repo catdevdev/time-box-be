@@ -8,10 +8,15 @@ import { User } from 'src/users/schemas/user.schema';
 export type BoxDocument = Box & Document;
 
 @Schema()
+export class Image {}
+
+@Schema()
 export class Box {
   @Prop() name: string;
   @Prop() description: string;
   @Prop() placement: number;
+  @Prop() imageIds: string[];
+  @Prop() notes: string[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Warehouse.name })
   warehouse: Warehouse;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })

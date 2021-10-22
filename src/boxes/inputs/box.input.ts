@@ -6,8 +6,6 @@ export class BoxInput {
   name: string;
   @Field()
   description: string;
-  @Field()
-  user: string;
 }
 
 @InputType()
@@ -18,4 +16,12 @@ export class AddPlacementForBoxInput {
   placement: number;
   @Field()
   warehouseId: string;
+}
+
+@InputType()
+export class AddNoteIntoBoxInput {
+  @Field()
+  boxId: string;
+  @Field()
+  note: string;
 }

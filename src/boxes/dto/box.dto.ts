@@ -12,6 +12,8 @@ export class BoxType {
   @Field(() => ID) id: string;
   @Field() name: string;
   @Field() description: string;
+  @Field(() => [String]) imageIds: string[];
+  @Field(() => [String]) notes: string[];
   @Field({ nullable: true }) placement: number;
   @Field(() => WarehouseType, { nullable: true }) warehouse: WarehouseType;
   @Field(() => UserType) user: UserType;
