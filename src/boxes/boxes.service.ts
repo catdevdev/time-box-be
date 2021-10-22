@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Box, BoxDocument } from './schemas/box.schema';
@@ -12,24 +12,39 @@ import {
 export class BoxesService {
   constructor(@InjectModel(Box.name) private boxModel: Model<BoxDocument>) {}
 
-  async create(boxInput: BoxInput): Promise<Box> {
-    const createdBox = new this.boxModel(boxInput);
+  async create(
+    boxName: string,
+    boxDescription: string,
+    userId: ObjectId,
+  ): Promise<Box> {
+    const createdBox = new this.boxModel({
+      name: boxName,
+      description: boxDescription,
+      user: userId,
+    });
     return createdBox.save();
   }
 
-  async findAllByUserId(userId: string): Promise<Box[]> {
-    console.log(userId)
-    return this.boxModel
-      .find({ "user.id": userId })
-      .populate('warehouse')
-      .populate('user')
-      .exec();
-  }
   async findAll(): Promise<Box[]> {
     return this.boxModel.find().populate('warehouse').populate('user').exec();
   }
+
   async findByName(name: string): Promise<Box[]> {
     return this.boxModel.find({ name }).exec();
+  }
+
+  async addImageIntoBox(boxId: string, imageId: string): Promise<Box> {
+    const box = await this.boxModel.findByIdAndUpdate(boxId, {
+      $push: { imageIds: imageId },
+    });
+    return box;
+  }
+
+  async addNoteIntoBox(boxId: string, noteTxt: string): Promise<Box> {
+    const box = await this.boxModel.findByIdAndUpdate(boxId, {
+      $push: { notes: noteTxt },
+    });
+    return box;
   }
 
   async addPlacementForBox(
