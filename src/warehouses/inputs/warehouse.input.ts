@@ -6,8 +6,16 @@ class LocationInput {
   @Field() longitude: number;
 }
 
+// @InputType()
+// export class WarehouseInput {
+//   @Field()
+//   name: string;
+//   @Field()
+//   location: LocationInput;
+// }
+
 @InputType()
-export class WarehouseInput {
+export class WarehouseGroupInput {
   @Field()
   name: string;
   @Field()

@@ -20,8 +20,11 @@ export class UsersResolver {
 
   @Query(() => UserType)
   @UseGuards(GqlAuthGuard)
-  async me(@CurrentUser() currentUser: User) {
-    return this.usersService.findOneByName(currentUser.username);
+  async me(
+    @Args('boxId', { nullable: true }) boxId: string,
+    @CurrentUser() currentUser: User,
+  ) {
+    return this.usersService.findOneByName(currentUser.username, boxId);
   }
 
   @Mutation(() => UserType)

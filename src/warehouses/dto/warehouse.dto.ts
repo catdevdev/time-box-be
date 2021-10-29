@@ -10,12 +10,17 @@ class Location {
 @ObjectType()
 export class WarehouseType {
   @Field(() => ID)
+  id: string; 
+  @Field(() => [BoxType]) boxes: BoxType[];
+}
+@ObjectType()
+export class WarehouseGroupType {
+  @Field(() => ID)
   id: string;
   @Field()
   name: string;
   @Field(() => Location)
   location: Location;
-  @Field(() => [BoxType]) boxes: BoxType[];
 }
 
 @ObjectType()
