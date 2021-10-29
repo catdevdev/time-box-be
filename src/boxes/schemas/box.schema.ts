@@ -1,8 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Warehouse } from 'src/warehouses/schemas/warehouse.schema';
 import { User } from 'src/users/schemas/user.schema';
+import { Transform } from 'class-transformer';
+
 // import { Type } from 'class-transformer';
 
 export type BoxDocument = Box & Document;
@@ -12,6 +14,8 @@ export class Image {}
 
 @Schema()
 export class Box {
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
   @Prop() name: string;
   @Prop() description: string;
   @Prop() placement: number;

@@ -20,9 +20,9 @@ export class TransportSubstrateService {
 
   transportSubstratePositions = transportSubstratePositions;
   fillTransportSubstratePositions = async () => {
-    const warehouses = await this.warehousesService.findAll();
+    const warehouses = [];
     console.log(warehouses);
-    warehouses.map(({_id}) => {
+    warehouses.map(({ _id }) => {
       transportSubstratePositions.push({
         warehouseId: _id,
         position: this.startedPosition,

@@ -21,7 +21,11 @@ export class UsersService {
     return this.userModel.find().populate('boxes').exec();
   }
 
-  async findOneByName(username: string): Promise<User> {
-    return this.userModel.findOne({ username }).populate('boxes').exec();
+  async findOneByName(username: string, boxId?: string): Promise<User> {
+    const filterMatch = boxId && { match: { _id: boxId } };
+    return this.userModel
+      .findOne({ username })
+      .populate({ path: 'boxes', ...filterMatch })
+      .exec();
   }
 }

@@ -15,6 +15,7 @@ import { extname } from 'path';
 import { BoxesService } from './boxes.service';
 
 import { nanoid } from 'nanoid';
+import { ObjectId } from 'mongoose';
 
 @Controller('boxes')
 export class BoxesController {
@@ -26,17 +27,21 @@ export class BoxesController {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, cb) => {
-          const id = nanoid(3);
-          cb(
-            null,
-            `${id}${extname(file.originalname)}
-          `,
-          );
+          const fileExtName = extname(file.originalname);
+          console.log(cb);
+          console.log(file);
+          console.log(extname(file.originalname));
+          const id = nanoid(50);
+          cb(null, `${id}${fileExtName}`);
         },
       }),
     }),
   )
-  uploadFile(@UploadedFile() file: Express.Multer.File, @Body() boxId: string) {
-    this.boxes.addImageIntoBox(boxId, file.filename);
+  uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: { boxId: string },
+  ) {
+    console.log(body.boxId);
+    this.boxes.addImageIntoBox(body.boxId, file.filename);
   }
 }

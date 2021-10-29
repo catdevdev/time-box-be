@@ -21,12 +21,6 @@ export class BoxesResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => [BoxType])
-  async box(@Args('name') input: string, @CurrentUser() currentUser: User) {
-    return this.boxesService.findByName(input);
-  }
-
-  @UseGuards(GqlAuthGuard)
   @Mutation(() => BoxType)
   async createBox(
     @Args('input') input: BoxInput,

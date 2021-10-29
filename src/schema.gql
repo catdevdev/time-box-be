@@ -16,9 +16,13 @@ type Location {
 
 type WarehouseType {
   id: ID!
+  boxes: [BoxType!]!
+}
+
+type WarehouseGroupType {
+  id: ID!
   name: String!
   location: Location!
-  boxes: [BoxType!]!
 }
 
 type BoxType {
@@ -50,23 +54,22 @@ type TransportSubstrateType {
 
 type Query {
   boxes: [BoxType!]!
-  box(name: String!): [BoxType!]!
-  warehouses: [WarehouseType!]!
-  warehouse(id: String!): [WarehouseType!]!
+  warehouseGroups: [WarehouseGroupType!]!
+  warehouseGroup(id: String!): WarehouseGroupType!
   boxPositions: [BoxPositionType!]!
   transportSubstratePositions: [TransportSubstrateType!]!
   transportSubstratePosition(warehouseId: String!): TransportSubstrateType!
   testOdessa: String!
   testKyiv: String!
   users: [UserType!]!
-  me: UserType!
+  me(boxId: String): UserType!
 }
 
 type Mutation {
   createBox(input: BoxInput!): BoxType!
   addPlacementForBox(input: AddPlacementForBoxInput!): BoxType!
   addNoteIntoBox(input: AddNoteIntoBoxInput!): BoxType!
-  createdWarehouse(input: WarehouseInput!): WarehouseType!
+  createWarehousesGroup(warehouseGroupInput: WarehouseGroupInput!): [WarehouseGroupType!]!
   createUser(input: UserInput!): UserType!
 }
 
@@ -86,7 +89,7 @@ input AddNoteIntoBoxInput {
   note: String!
 }
 
-input WarehouseInput {
+input WarehouseGroupInput {
   name: String!
   location: LocationInput!
 }
