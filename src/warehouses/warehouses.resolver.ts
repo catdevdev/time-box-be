@@ -7,11 +7,8 @@ import {
   Resolver,
   Subscription,
 } from '@nestjs/graphql';
-import { WarehouseGroupType, WarehouseType } from './dto/warehouse.dto';
-import {
-  MoveTransportInput,
-  WarehouseGroupInput,
-} from './inputs/warehouse.input';
+import { WarehouseType } from './dto/warehouse.dto';
+import { MoveTransportInput } from './inputs/warehouse.input';
 import { WarehousesService } from './warehouses.service';
 
 import { PubSub } from 'graphql-subscriptions';
@@ -23,7 +20,8 @@ import {
   BoxPositionType,
   TransportSubstrateType,
 } from './dto/transportSubstrate.dto';
-import { WarehouseGroup } from './schemas/warehouse.schema';
+import { WarehouseGroupInput } from 'src/warehouses-group/inputs/warehouses-group.input';
+import { WarehouseGroupType } from 'src/warehouses-group/dto/warehouses-group.dto';
 
 @Resolver()
 export class WarehousesResolver {
@@ -32,25 +30,15 @@ export class WarehousesResolver {
     private transportSubstrate: TransportSubstrateService,
   ) {}
 
-  // @Query(() => [WarehouseType])
-  // async warehouses() {
-  //   return this.warehousesService.findAll();
-  // }
-
-  @Query(() => [WarehouseGroupType])
-  async warehouseGroups() {
-    return this.warehousesService.findAllWarehouseGroups();
+  @Query(() => [WarehouseType])
+  async warehouses() {
+    return this.warehousesService.findAllWarehouses();
   }
 
-  @Query(() => WarehouseGroupType)
-  async warehouseGroup(@Args('id') id: string): Promise<WarehouseGroup[]> {
-    return this.warehousesService.findByIDWarehouseGroup(id);
+  @Query(() => [WarehouseType])
+  async warehouse(@Args('id') input: string) {
+    return this.warehousesService.findByIDWarehouse(input);
   }
-
-  // @Query(() => [WarehouseType])
-  // async warehouse(@Args('id') input: string) {
-  //   return this.warehousesService.findByID(input);
-  // }
 
   @Query(() => [BoxPositionType])
   async boxPositions() {
@@ -67,22 +55,15 @@ export class WarehousesResolver {
     return this.transportSubstrate.transportSubstratePosition(warehouseId);
   }
 
-  @Mutation(() => [WarehouseGroupType])
-  async createWarehousesGroup(
-    @Args('warehouseGroupInput') warehouseGroupInput: WarehouseGroupInput,
-  ) {
-    return this.warehousesService.createWarehouseGroup(warehouseGroupInput);
+  @Mutation(() => WarehouseType)
+  async createWarehouse(@Args('warehouseId') warehouseId: string) {
+    return this.warehousesService.createWarehouse(warehouseId);
   }
-
-  // @Mutation(() => WarehouseType)
-  // async createdWarehouse(@Args('input') input: WarehouseInput) {
-  //   return this.warehousesService.create(input);
-  // }
 
   @Subscription(() => TransportSubstrateType, {
     filter: (payload, variables) => {
       return payload.moveTransport.warehouseId === variables.input.warehouseId;
-    },
+    },  
   })
   moveTransport(@Args('input') input: MoveTransportInput) {
     return pubSub.asyncIterator('transportPosition');

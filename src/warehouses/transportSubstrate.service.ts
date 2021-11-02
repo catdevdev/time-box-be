@@ -8,19 +8,35 @@ type Vector3 = { x: number; y: number; z: number };
 let transportSubstratePositions: { warehouseId: string; position: Vector3 }[] =
   [];
 
+const WAREHOUSE_MAX_CAPICITY = 160
+
 export const pubSub = new PubSub();
 
 @Injectable()
 export class TransportSubstrateService {
   constructor(private warehousesService: WarehousesService) {
     this.fillTransportSubstratePositions();
+    this.processWarehouse();
   }
+
+  private processWarehouseGroups = async () => {
+    const warehouseGroups = await this.warehousesService.findAllWarehouses();
+    warehouseGroups.map(({_id}) => {
+      this.processWarehouseGroup(_id)
+    });
+    this.fillTransportSubstratePositions()
+    // this.warehousesService.createWarehouse();
+  };
+
+  private processWarehouseGroup = (warehouseGroupId: string) => {
+    this.warehousesService.findAllWarehouses;
+  };
 
   startedPosition: Vector3 = { x: 0, y: 0.1, z: 2.1 };
 
   transportSubstratePositions = transportSubstratePositions;
   fillTransportSubstratePositions = async () => {
-    const warehouses = [];
+    const warehouses = await this.warehousesService.findAllWarehouses();
     console.log(warehouses);
     warehouses.map(({ _id }) => {
       transportSubstratePositions.push({
