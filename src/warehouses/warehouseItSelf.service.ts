@@ -3,12 +3,12 @@ import { ChildProcess } from 'child_process';
 import { PubSub } from 'graphql-subscriptions';
 import { WarehousesService } from './warehouses.service';
 
-import { positionsPlacements } from './variables';
-
 type Vector3 = { x: number; y: number; z: number };
 
 let transportSubstratePositions: { warehouseId: string; position: Vector3 }[] =
   [];
+
+const WAREHOUSE_MAX_CAPICITY = 160
 
 export const pubSub = new PubSub();
 
@@ -16,7 +16,21 @@ export const pubSub = new PubSub();
 export class TransportSubstrateService {
   constructor(private warehousesService: WarehousesService) {
     this.fillTransportSubstratePositions();
+    this.processWarehouse();
   }
+
+  private processWarehouseGroups = async () => {
+    const warehouseGroups = await this.warehousesService.findAllWarehouses();
+    warehouseGroups.map(({_id}) => {
+      this.processWarehouseGroup(_id)
+    });
+    this.fillTransportSubstratePositions()
+    // this.warehousesService.createWarehouse();
+  };
+
+  private processWarehouseGroup = (warehouseGroupId: string) => {
+    this.warehousesService.findAllWarehouses;
+  };
 
   startedPosition: Vector3 = { x: 0, y: 0.1, z: 2.1 };
 
@@ -40,6 +54,10 @@ export class TransportSubstrateService {
   };
 
   private moveTransport = (warehouseId: string, to: Vector3) => {
+    // const transportSubstratePosition = transportSubstratePositions.find(
+    //   (transportSubstratePosition) =>
+    //     transportSubstratePosition.warehouseId === warehouseId,
+    // );
     const speed = 1;
 
     const {
@@ -81,6 +99,23 @@ export class TransportSubstrateService {
     });
   };
 
+  public putBoxIntoWarehouse = async (
+    warehouseId: string,
+    placementIndex: number,
+    incomingBoxPosition: Vector3,
+  ) => {
+    await this.goToOusideBoxFromStartedPosition(
+      warehouseId,
+      incomingBoxPosition,
+    );
+    await this.goToStartedPositionFromOusideBox(warehouseId);
+    await this.goToPlacementPositionFromStartedPosition(
+      warehouseId,
+      placementIndex,
+    );
+    await this.goToStartedPositionFromPlacementPosition(warehouseId);
+  };
+
   private goToOusideBoxFromStartedPosition = async (
     warehouseId: string,
     positionIncomeBox: Vector3,
@@ -111,7 +146,7 @@ export class TransportSubstrateService {
     placementIndex: number,
   ) => {
     const positionsPlacement =
-      positionsPlacements[placementIndex].position;
+      this.positionsPlacements[placementIndex].position;
     const { position: transportSubstratePosition } =
       this.transportSubstratePosition(warehouseId);
     await this.moveTransport(warehouseId, {
@@ -162,4 +197,23 @@ export class TransportSubstrateService {
       z: this.startedPosition.z,
     });
   };
+
+  public unloadBoxFromWarehouse = async (
+    warehouseId: string,
+    placementIndex: number,
+    boxPositionOutside: Vector3,
+  ) => {
+    await this.goToPlacementPositionFromStartedPosition(
+      warehouseId,
+      placementIndex,
+    );
+    await this.goToStartedPositionFromPlacementPosition(warehouseId);
+    await this.goToOusideBoxFromStartedPosition(
+      warehouseId,
+      boxPositionOutside,
+    );
+    await this.goToStartedPositionFromOusideBox(warehouseId);
+  };
+
+  
 }
