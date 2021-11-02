@@ -3,7 +3,7 @@ import { WarehousesService } from './warehouses.service';
 import { WarehousesResolver } from './warehouses.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Warehouse, WarehouseSchema } from './schemas/warehouse.schema';
-import { TransportSubstrateService } from './transportSubstrate.service';
+import { TransportSubstrateService } from './warehouseItSelf.service';
 
 @Module({
   imports: [

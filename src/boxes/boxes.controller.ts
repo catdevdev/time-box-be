@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream, createWriteStream } from 'fs';
-import { TransportSubstrateService } from 'src/warehouses/transportSubstrate.service';
+import { TransportSubstrateService } from 'src/warehouses/warehouseItSelf.service';
 import { WarehousesService } from 'src/warehouses/warehouses.service';
 
 import { diskStorage } from 'multer';

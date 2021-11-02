@@ -15,7 +15,7 @@ import { PubSub } from 'graphql-subscriptions';
 import {
   pubSub,
   TransportSubstrateService,
-} from './transportSubstrate.service';
+} from './warehouseItSelf.service';
 import {
   BoxPositionType,
   TransportSubstrateType,
