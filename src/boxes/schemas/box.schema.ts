@@ -10,9 +10,6 @@ import { Transform } from 'class-transformer';
 export type BoxDocument = Box & Document;
 
 @Schema()
-export class Image {}
-
-@Schema()
 export class Box {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
@@ -23,6 +20,7 @@ export class Box {
   @Prop() notes: string[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Warehouse.name })
   warehouse: Warehouse;
+  
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
   user: User;
 }

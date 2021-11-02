@@ -12,6 +12,8 @@ import { BoxesService } from './boxes/boxes.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { WarehousesGroupService } from './warehouses-group/warehouses-group.service';
+import { WarehouseGroupsModule } from './warehouses-group/warehouses-group.module';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     WarehousesModule,
     UsersModule,
     AuthModule,
+    WarehouseGroupsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

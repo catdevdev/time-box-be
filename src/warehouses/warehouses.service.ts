@@ -1,42 +1,29 @@
-import { Model, ObjectId } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  Warehouse,
-  WarehouseDocument,
-  WarehouseGroup,
-} from './schemas/warehouse.schema';
-import { WarehouseGroupInput } from './inputs/warehouse.input';
+import { Warehouse, WarehouseDocument } from './schemas/warehouse.schema';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class WarehousesService {
   constructor(
     @InjectModel(Warehouse.name)
-    private warehouseGroupModel: Model<WarehouseDocument>,
+    private warehouseModel: Model<WarehouseDocument>,
   ) {}
 
-  async createWarehouseGroup(
-    warehouseGroupInput: WarehouseGroupInput,
-  ): Promise<WarehouseGroup> {
-    const createdWarehouseGroup = new this.warehouseGroupModel(
-      warehouseGroupInput,
-    );
-    console.log(warehouseGroupInput);
-    console.log(createdWarehouseGroup);
-    const a = createdWarehouseGroup.save();
-    console.log(await a);
-    return a;
+  async createWarehouse(warehouseId: string): Promise<Warehouse> {
+    const createdWarehouse = new this.warehouseModel({
+      _id: new Types.ObjectId(),
+      warehouse: warehouseId,
+    });
+    return createdWarehouse.save();
   }
 
-  async findAllWarehouseGroups(): Promise<WarehouseGroup[]> {
-    return this.warehouseGroupModel.find().exec();
+  async findAllWarehouses(): Promise<Warehouse[]> {
+    return this.warehouseModel.find().populate('boxes').exec();
   }
 
-  async findAllWarehouses(): Promise<WarehouseGroup[]> {
-    return this.warehouseGroupModel.find().populate('boxes').exec();
-  }
-
-  async findByIDWarehouseGroup(id: string): Promise<WarehouseGroup[]> {
-    return this.warehouseGroupModel.find({ _id: id }).exec();
+  async findByIDWarehouse(id: string): Promise<Warehouse> {
+    return this.warehouseModel.findOne({ _id: id }).exec();
   }
 }

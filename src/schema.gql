@@ -9,20 +9,9 @@ type UserType {
   boxes: [BoxType!]!
 }
 
-type Location {
-  latitude: Float!
-  longitude: Float!
-}
-
 type WarehouseType {
   id: ID!
   boxes: [BoxType!]!
-}
-
-type WarehouseGroupType {
-  id: ID!
-  name: String!
-  location: Location!
 }
 
 type BoxType {
@@ -52,10 +41,22 @@ type TransportSubstrateType {
   speed: Float!
 }
 
+type LocationType {
+  latitude: Float!
+  longitude: Float!
+}
+
+type WarehouseGroupType {
+  id: ID!
+  name: String!
+  location: LocationType!
+  warehouses: [WarehouseType!]!
+}
+
 type Query {
   boxes: [BoxType!]!
-  warehouseGroups: [WarehouseGroupType!]!
-  warehouseGroup(id: String!): WarehouseGroupType!
+  warehouses: [WarehouseType!]!
+  warehouse(id: String!): [WarehouseType!]!
   boxPositions: [BoxPositionType!]!
   transportSubstratePositions: [TransportSubstrateType!]!
   transportSubstratePosition(warehouseId: String!): TransportSubstrateType!
@@ -63,14 +64,17 @@ type Query {
   testKyiv: String!
   users: [UserType!]!
   me(boxId: String): UserType!
+  warehouseGroups: [WarehouseGroupType!]!
+  warehouseGroup(id: String!): WarehouseGroupType!
 }
 
 type Mutation {
   createBox(input: BoxInput!): BoxType!
   addPlacementForBox(input: AddPlacementForBoxInput!): BoxType!
   addNoteIntoBox(input: AddNoteIntoBoxInput!): BoxType!
-  createWarehousesGroup(warehouseGroupInput: WarehouseGroupInput!): [WarehouseGroupType!]!
+  createWarehouse(warehouseId: String!): WarehouseType!
   createUser(input: UserInput!): UserType!
+  createWarehousesGroup(warehouseGroupInput: WarehouseGroupInput!): WarehouseGroupType!
 }
 
 input BoxInput {
@@ -89,6 +93,11 @@ input AddNoteIntoBoxInput {
   note: String!
 }
 
+input UserInput {
+  username: String!
+  password: String!
+}
+
 input WarehouseGroupInput {
   name: String!
   location: LocationInput!
@@ -97,11 +106,6 @@ input WarehouseGroupInput {
 input LocationInput {
   latitude: Float!
   longitude: Float!
-}
-
-input UserInput {
-  username: String!
-  password: String!
 }
 
 type Subscription {
