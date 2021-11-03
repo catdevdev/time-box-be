@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { WarehouseGroupInput } from './inputs/warehouses-group.input';
 import {
   WarehouseDocument,
@@ -17,20 +17,22 @@ export class WarehousesGroupService {
   async createWarehouseGroup(
     warehouseGroupInput: WarehouseGroupInput,
   ): Promise<WarehouseGroup> {
-    const createdWarehouseGroup = new this.warehouseGroupModel(
-      warehouseGroupInput,
-    );
+    const createdWarehouseGroup = new this.warehouseGroupModel({
+      ...warehouseGroupInput,
+      _id: new Types.ObjectId(),
+    });
 
     return createdWarehouseGroup.save();
   }
 
   async findAllWarehouseGroups(): Promise<WarehouseGroup[]> {
-    return this.warehouseGroupModel.find().populate('warehouses').exec();
+    const a = this.warehouseGroupModel.find().populate('warehouses').exec();
+    const b = await a;
+    console.log(b);
+    return a;
   }
 
-  async findByIDWarehouseGroup(id: string): Promise<WarehouseGroup[]> {
-    return this.warehouseGroupModel.find({ _id: id }).exec();
+  async findByIDWarehouseGroup(id: string): Promise<WarehouseGroup> {
+    return this.warehouseGroupModel.findOne({ _id: id }).exec();
   }
 }
-
-

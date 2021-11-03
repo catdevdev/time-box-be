@@ -6,8 +6,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { createReadStream, createWriteStream } from 'fs';
-import { TransportSubstrateService } from 'src/warehouses/warehouseItSelf.service';
+
 import { WarehousesService } from 'src/warehouses/warehouses.service';
 
 import { diskStorage } from 'multer';
@@ -19,7 +18,7 @@ import { ObjectId } from 'mongoose';
 
 @Controller('boxes')
 export class BoxesController {
-  constructor(private boxes: BoxesService) {} // private transportSubstrate: TransportSubstrateService, // private warehousesService: WarehousesService,
+  constructor(private boxes: BoxesService) {}
 
   @Post('upload')
   @UseInterceptors(

@@ -9,26 +9,20 @@ import {
 } from '@nestjs/graphql';
 import { WarehouseType } from './dto/warehouse.dto';
 import { MoveTransportInput } from './inputs/warehouse.input';
-import { WarehousesService } from './warehouses.service';
+import { pubSub, WarehousesService } from './warehouses.service';
 
-import { PubSub } from 'graphql-subscriptions';
-import {
-  pubSub,
-  TransportSubstrateService,
-} from './warehouseItSelf.service';
 import {
   BoxPositionType,
   TransportSubstrateType,
 } from './dto/transportSubstrate.dto';
 import { WarehouseGroupInput } from 'src/warehouses-group/inputs/warehouses-group.input';
 import { WarehouseGroupType } from 'src/warehouses-group/dto/warehouses-group.dto';
+import { positionsPlacements } from './variables';
+import { Types } from 'mongoose';
 
 @Resolver()
 export class WarehousesResolver {
-  constructor(
-    private warehousesService: WarehousesService,
-    private transportSubstrate: TransportSubstrateService,
-  ) {}
+  constructor(private warehousesService: WarehousesService) {}
 
   @Query(() => [WarehouseType])
   async warehouses() {
@@ -42,17 +36,22 @@ export class WarehousesResolver {
 
   @Query(() => [BoxPositionType])
   async boxPositions() {
-    return this.transportSubstrate.positionsPlacements;
+    return positionsPlacements;
+  }
+
+  @Query(() => WarehouseType)
+  async freeWarehouseByWarehouseGroupId(@Args('id') warehouseGroupId: string) {
+    return this.warehousesService.getFreeWarehouseByWarehouseGroupId(warehouseGroupId)
   }
 
   @Query(() => [TransportSubstrateType])
   async transportSubstratePositions() {
-    return this.transportSubstrate.transportSubstratePositions;
+    return this.warehousesService.transportSubstratePositions;
   }
 
   @Query(() => TransportSubstrateType)
   async transportSubstratePosition(@Args('warehouseId') warehouseId: string) {
-    return this.transportSubstrate.transportSubstratePosition(warehouseId);
+    return this.warehousesService.transportSubstratePosition(warehouseId);
   }
 
   @Mutation(() => WarehouseType)
@@ -63,7 +62,7 @@ export class WarehousesResolver {
   @Subscription(() => TransportSubstrateType, {
     filter: (payload, variables) => {
       return payload.moveTransport.warehouseId === variables.input.warehouseId;
-    },  
+    },
   })
   moveTransport(@Args('input') input: MoveTransportInput) {
     return pubSub.asyncIterator('transportPosition');
@@ -71,45 +70,25 @@ export class WarehousesResolver {
 
   @Query(() => String)
   async testOdessa() {
-    await this.transportSubstrate.putBoxIntoWarehouse(
+    await this.warehousesService.putBoxIntoWarehouse(
       '61619e0c301f12dbc8457fd4',
       5,
-      {
-        x: -4,
-        y: 0.1,
-        z: 5,
-      },
     );
-    await this.transportSubstrate.unloadBoxFromWarehouse(
+    await this.warehousesService.unloadBoxFromWarehouse(
       '61619e0c301f12dbc8457fd4',
       5,
-      {
-        x: -4,
-        y: 0.1,
-        z: 7,
-      },
     );
     return 'test move';
   }
   @Query(() => String)
   async testKyiv() {
-    await this.transportSubstrate.putBoxIntoWarehouse(
+    await this.warehousesService.putBoxIntoWarehouse(
       '6168c3ca4558383d637331f8',
       5,
-      {
-        x: -4,
-        y: 0.1,
-        z: 5,
-      },
     );
-    await this.transportSubstrate.unloadBoxFromWarehouse(
+    await this.warehousesService.unloadBoxFromWarehouse(
       '6168c3ca4558383d637331f8',
       5,
-      {
-        x: -4,
-        y: 0.1,
-        z: 7,
-      },
     );
     return 'test move';
   }

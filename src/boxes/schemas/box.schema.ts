@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Types } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { Warehouse } from 'src/warehouses/schemas/warehouse.schema';
 import { User } from 'src/users/schemas/user.schema';
@@ -11,8 +11,8 @@ export type BoxDocument = Box & Document;
 
 @Schema()
 export class Box {
-  @Transform(({ value }) => value.toString())
-  _id: ObjectId;
+  @Prop(() => Types.ObjectId)
+  _id: Types.ObjectId;
   @Prop() name: string;
   @Prop() description: string;
   @Prop() placement: number;
@@ -20,7 +20,6 @@ export class Box {
   @Prop() notes: string[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Warehouse.name })
   warehouse: Warehouse;
-  
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
   user: User;
 }

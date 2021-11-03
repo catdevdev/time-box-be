@@ -9,9 +9,22 @@ type UserType {
   boxes: [BoxType!]!
 }
 
+type LocationType {
+  latitude: Float!
+  longitude: Float!
+}
+
+type WarehouseGroupType {
+  id: ID!
+  name: String!
+  location: LocationType!
+  warehouses: [WarehouseType!]!
+}
+
 type WarehouseType {
   id: ID!
   boxes: [BoxType!]!
+  warehouseGroup: WarehouseGroupType!
 }
 
 type BoxType {
@@ -41,23 +54,12 @@ type TransportSubstrateType {
   speed: Float!
 }
 
-type LocationType {
-  latitude: Float!
-  longitude: Float!
-}
-
-type WarehouseGroupType {
-  id: ID!
-  name: String!
-  location: LocationType!
-  warehouses: [WarehouseType!]!
-}
-
 type Query {
   boxes: [BoxType!]!
   warehouses: [WarehouseType!]!
   warehouse(id: String!): [WarehouseType!]!
   boxPositions: [BoxPositionType!]!
+  freeWarehouseByWarehouseGroupId(id: String!): WarehouseType!
   transportSubstratePositions: [TransportSubstrateType!]!
   transportSubstratePosition(warehouseId: String!): TransportSubstrateType!
   testOdessa: String!
