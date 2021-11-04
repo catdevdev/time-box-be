@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 import { Vector3 } from 'src/types';
 import { PubSub } from 'graphql-subscriptions';
 import { positionsPlacements } from './variables';
+import { BoxesService } from 'src/boxes/boxes.service';
 
 export const pubSub = new PubSub();
 
@@ -36,12 +37,12 @@ export class WarehousesService {
   constructor(
     @InjectModel(Warehouse.name)
     private warehouseModel: Model<WarehouseDocument>,
+    private boxesService: BoxesService,
   ) {
     this.initTransportSubstrateInWarehouses();
   }
 
   async createWarehouse(warehouseGroupId: string): Promise<Warehouse> {
-    console.log(warehouseGroupId);
     const createdWarehouse = new this.warehouseModel({
       _id: new Types.ObjectId(),
       warehouseGroup: warehouseGroupId,
@@ -59,18 +60,46 @@ export class WarehousesService {
   }
 
   async findByIDWarehouse(id: string): Promise<Warehouse> {
-    return this.warehouseModel.findOne({ _id: id }).exec();
+    return this.warehouseModel
+      .findOne({ _id: id })
+      .populate('boxes')
+      .populate('warehouseGroup')
+      .exec();
   }
 
   public putBoxIntoWarehouse = async (
     warehouseId: string,
-    placementIndex: number,
+    boxId: string,
+    seconds: number,
   ) => {
     const incomingBoxPosition = {
       x: -4,
       y: 0.1,
       z: 5,
     };
+    const warehouse = await this.findByIDWarehouse(warehouseId);
+    const busyPlacements: number[] = [];
+    warehouse.boxes.map(({ placement }) => {
+      busyPlacements.push(placement);
+    });
+    const freePlacements: number[] = [];
+    Array.from(Array(MAX_CAPACITY_WAREHOUSE)).forEach((_, i) => {
+      console.log(i);
+      busyPlacements.forEach((index) => {
+        console.log(index, i);
+        if (index !== i) {
+          freePlacements.push(i);
+        }
+      });
+      if (busyPlacements.length === 0) {
+        freePlacements.push(i);
+      }
+    });
+    console.log('freePlacements');
+    console.log(freePlacements);
+    const placementIndex =
+      freePlacements[Math.floor(Math.random() * freePlacements.length)];
+
     await this.goToOusideBoxFromStartedPosition(
       warehouseId,
       incomingBoxPosition,
@@ -80,6 +109,14 @@ export class WarehousesService {
       warehouseId,
       placementIndex,
     );
+
+    await this.boxesService.addPlacementForBox(
+      boxId,
+      placementIndex,
+      warehouseId,
+    );
+    const box = await this.boxesService.closeBoxForTime(boxId, seconds);
+    console.log(box)
     await this.goToStartedPositionFromPlacementPosition(warehouseId);
   };
 
@@ -229,7 +266,6 @@ export class WarehousesService {
     });
     const delay = 0;
     const time = (distance * 1100 + delay) / speed;
-    console.log(time);
 
     return new Promise(function (resolve) {
       setTimeout(resolve, time);
@@ -265,6 +301,8 @@ export class WarehousesService {
     warehouseId: string,
     placementIndex: number,
   ) => {
+    console.log(positionsPlacements.length);
+    console.log(placementIndex);
     const positionsPlacement = positionsPlacements[placementIndex].position;
     const { position: transportSubstratePosition } =
       this.transportSubstratePosition(warehouseId);

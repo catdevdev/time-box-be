@@ -12,3 +12,12 @@ export class MoveTransportInput {
   @Field()
   warehouseId: string;
 }
+@InputType()
+export class PutBoxIntoWarehouseInput {
+  @Field()
+  warehouseGroupId: string;
+  @Field()
+  boxId: string;
+  @Field()
+  seconds: number;
+}
