@@ -22,7 +22,21 @@ export class UsersService {
   }
 
   async findOneByName(username: string, boxId?: string): Promise<User> {
-    const filterMatch = boxId && { match: { _id: boxId } };
+    // const filterMatch = boxId && {
+    //   match: {
+    //     _id: {
+    //       $ne: boxId,
+    //     },
+    //   },
+    // };
+    console.log(boxId);
+    const filterMatch = boxId && {
+      match: {
+        _id: {
+          $eq: boxId,
+        },
+      },
+    };
     return this.userModel
       .findOne({ username })
       .populate({ path: 'boxes', ...filterMatch })

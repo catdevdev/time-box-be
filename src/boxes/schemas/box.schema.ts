@@ -11,13 +11,14 @@ export type BoxDocument = Box & Document;
 
 @Schema()
 export class Box {
-  @Prop(() => Types.ObjectId)
-  _id: Types.ObjectId;
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
   @Prop() name: string;
   @Prop() description: string;
   @Prop() placement: number;
   @Prop() imageIds: string[];
   @Prop() notes: string[];
+  @Prop() dateWhenCanBeOpened: Date;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Warehouse.name })
   warehouse: Warehouse;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })

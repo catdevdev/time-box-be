@@ -33,10 +33,16 @@ type BoxType {
   description: String!
   imageIds: [String!]!
   notes: [String!]!
+  dateWhenCanBeOpened: DateTime
   placement: Float
   warehouse: WarehouseType
   user: UserType!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type PositionType {
   x: Float!
@@ -62,12 +68,17 @@ type Query {
   freeWarehouseByWarehouseGroupId(id: String!): WarehouseType!
   transportSubstratePositions: [TransportSubstrateType!]!
   transportSubstratePosition(warehouseId: String!): TransportSubstrateType!
-  testOdessa: String!
-  testKyiv: String!
+  putBoxIntoWarehouse(putBoxIntoWarehouseInput: PutBoxIntoWarehouseInput!): WarehouseType!
   users: [UserType!]!
   me(boxId: String): UserType!
   warehouseGroups: [WarehouseGroupType!]!
   warehouseGroup(id: String!): WarehouseGroupType!
+}
+
+input PutBoxIntoWarehouseInput {
+  warehouseGroupId: String!
+  boxId: String!
+  seconds: Float!
 }
 
 type Mutation {

@@ -1,4 +1,4 @@
-import { Model, ObjectId } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Box, BoxDocument } from './schemas/box.schema';
@@ -18,6 +18,7 @@ export class BoxesService {
     userId: ObjectId,
   ): Promise<Box> {
     const createdBox = new this.boxModel({
+      _id: new Types.ObjectId(),
       name: boxName,
       description: boxDescription,
       user: userId,
@@ -55,6 +56,15 @@ export class BoxesService {
     return this.boxModel.findOneAndUpdate(
       { _id: boxId },
       { placement, warehouseId },
+    );
+  }
+
+  async closeBoxForTime(boxId: string, timeInSeconds: number): Promise<Box> {
+    var date = new Date();
+    date.setSeconds(date.getSeconds() + timeInSeconds);
+    return this.boxModel.findOneAndUpdate(
+      { _id: boxId },
+      { dateWhenCanBeOpened: date },
     );
   }
 }

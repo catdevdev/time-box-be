@@ -5,10 +5,10 @@ import { BoxesService } from './boxes.service';
 import { Box, BoxSchema } from './schemas/box.schema';
 import { BoxesController } from './boxes.controller';
 
-
 @Module({
   imports: [MongooseModule.forFeature([{ name: Box.name, schema: BoxSchema }])],
   providers: [BoxesResolver, BoxesService],
   controllers: [BoxesController],
+  exports: [BoxesService],
 })
 export class BoxesModule {}
