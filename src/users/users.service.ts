@@ -4,6 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UsersDocument } from './schemas/user.schema';
 import { UserInput } from './inputs/user.input';
 import { UserType } from './dto/user.dto';
+import { Warehouse } from 'src/warehouses/schemas/warehouse.schema';
+import { WarehouseGroup } from 'src/warehouses-group/schemas/warehouses-group.schema';
 
 @Injectable()
 export class UsersService {
@@ -22,14 +24,6 @@ export class UsersService {
   }
 
   async findOneByName(username: string, boxId?: string): Promise<User> {
-    // const filterMatch = boxId && {
-    //   match: {
-    //     _id: {
-    //       $ne: boxId,
-    //     },
-    //   },
-    // };
-    console.log(boxId);
     const filterMatch = boxId && {
       match: {
         _id: {
@@ -37,9 +31,19 @@ export class UsersService {
         },
       },
     };
+
     return this.userModel
       .findOne({ username })
-      .populate({ path: 'boxes', ...filterMatch })
+      .populate({
+        path: 'boxes',
+        ...filterMatch,
+        populate: {
+          path: 'warehouse',
+          populate: {
+            path: 'warehouseGroup',
+          },
+        },
+      })
       .exec();
   }
 }

@@ -55,7 +55,8 @@ export class BoxesService {
   ): Promise<Box> {
     return this.boxModel.findOneAndUpdate(
       { _id: boxId },
-      { placement, warehouseId },
+      // @ts-ignore
+      { placement, warehouse: warehouseId },
     );
   }
 
