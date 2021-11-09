@@ -57,17 +57,29 @@ type BoxPositionType {
 type TransportSubstrateType {
   position: PositionType!
   warehouseId: String!
+  boxOnSubstrate: Boolean!
   speed: Float!
+}
+
+type BoxesType {
+  position: PositionType!
+  boxId: String!
+}
+
+type GroupBoxesToTransportType {
+  warehouseId: String!
+  boxes: [BoxesType!]!
 }
 
 type Query {
   boxes: [BoxType!]!
   warehouses: [WarehouseType!]!
   warehouse(id: String!): [WarehouseType!]!
-  boxPositions: [BoxPositionType!]!
+  boxesPosition(warehouseId: String!): [BoxPositionType!]!
   freeWarehouseByWarehouseGroupId(id: String!): WarehouseType!
   transportSubstratePositions: [TransportSubstrateType!]!
   transportSubstratePosition(warehouseId: String!): TransportSubstrateType!
+  boxToTransport(warehouseId: String!): GroupBoxesToTransportType!
   putBoxIntoWarehouse(putBoxIntoWarehouseInput: PutBoxIntoWarehouseInput!): WarehouseType!
   users: [UserType!]!
   me(boxId: String): UserType!
@@ -123,8 +135,13 @@ input LocationInput {
 
 type Subscription {
   moveTransport(input: MoveTransportInput!): TransportSubstrateType!
+  boxesToTransportPosition(input: BoxStatusInput!): GroupBoxesToTransportType!
 }
 
 input MoveTransportInput {
+  warehouseId: String!
+}
+
+input BoxStatusInput {
   warehouseId: String!
 }

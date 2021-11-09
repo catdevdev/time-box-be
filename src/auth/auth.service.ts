@@ -12,7 +12,6 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
-    console.log('object1');
     const user = await this.usersService.findOneByName(username);
 
     if (user && user.password === pass) {
@@ -31,7 +30,6 @@ export class AuthService {
   }
 
   verify(token: string): Promise<User> {
-    console.log('object');
     const decoded = this.jwtService.verify(token, {
       secret: '123',
     });
