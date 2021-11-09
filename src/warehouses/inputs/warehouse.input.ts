@@ -13,6 +13,12 @@ export class MoveTransportInput {
   warehouseId: string;
 }
 @InputType()
+export class BoxStatusInput {
+  @Field()
+  warehouseId: string;
+}
+
+@InputType()
 export class PutBoxIntoWarehouseInput {
   @Field()
   warehouseGroupId: string;

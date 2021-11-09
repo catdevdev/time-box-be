@@ -27,9 +27,7 @@ export class BoxesController {
         destination: './uploads',
         filename: (req, file, cb) => {
           const fileExtName = extname(file.originalname);
-          console.log(cb);
-          console.log(file);
-          console.log(extname(file.originalname));
+
           const id = nanoid(50);
           cb(null, `${id}${fileExtName}`);
         },
@@ -40,7 +38,6 @@ export class BoxesController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: { boxId: string },
   ) {
-    console.log(body.boxId);
     this.boxes.addImageIntoBox(body.boxId, file.filename);
   }
 }

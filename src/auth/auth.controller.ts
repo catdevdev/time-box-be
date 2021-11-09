@@ -29,7 +29,6 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: AuthReq): Promise<{ access_token: string }> {
-    console.log(body);
     await this.usersService.create(body);
     const foundUser = await this.usersService.findOneByName(body.username);
     const token = await this.authService.login(foundUser);

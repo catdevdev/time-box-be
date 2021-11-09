@@ -24,5 +24,23 @@ export class TransportSubstrateType {
   @Field()
   warehouseId: string;
   @Field()
+  boxOnSubstrate: boolean;
+  @Field()
   speed: number;
+}
+
+@ObjectType()
+export class BoxesType {
+  @Field(() => PositionType)
+  position: PositionType;
+  @Field()
+  boxId: string;
+}
+
+@ObjectType()
+export class GroupBoxesToTransportType {
+  @Field()
+  warehouseId: string;
+  @Field(() => [BoxesType])
+  boxes: BoxesType[];
 }

@@ -28,7 +28,6 @@ export class WarehousesGroupService {
   async findAllWarehouseGroups(): Promise<WarehouseGroup[]> {
     const a = this.warehouseGroupModel.find().populate('warehouses').exec();
     const b = await a;
-    console.log(b);
     return a;
   }
 

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { WarehouseType } from './dto/warehouse.dto';
 import {
+  BoxStatusInput,
   MoveTransportInput,
   PutBoxIntoWarehouseInput,
 } from './inputs/warehouse.input';
@@ -16,13 +17,9 @@ import { pubSub, WarehousesService } from './warehouses.service';
 
 import {
   BoxPositionType,
+  GroupBoxesToTransportType,
   TransportSubstrateType,
 } from './dto/transportSubstrate.dto';
-import { WarehouseGroupInput } from 'src/warehouses-group/inputs/warehouses-group.input';
-import { WarehouseGroupType } from 'src/warehouses-group/dto/warehouses-group.dto';
-import { positionsPlacements } from './variables';
-import { Types } from 'mongoose';
-import { Warehouse } from './schemas/warehouse.schema';
 
 @Resolver()
 export class WarehousesResolver {
@@ -39,8 +36,8 @@ export class WarehousesResolver {
   }
 
   @Query(() => [BoxPositionType])
-  async boxPositions() {
-    return positionsPlacements;
+  async boxesPosition(@Args('warehouseId') warehouseId: string) {
+    return this.warehousesService.getBoxesPosition(warehouseId);
   }
 
   @Query(() => WarehouseType)
@@ -74,6 +71,29 @@ export class WarehousesResolver {
     return pubSub.asyncIterator('transportPosition');
   }
 
+  @Subscription(() => GroupBoxesToTransportType, {
+    filter: (payload, variables) => {
+      return (
+        payload.boxesToTransportPosition.warehouseId ===
+        variables.input.warehouseId
+      );
+    },
+  })
+  boxesToTransportPosition(@Args('input') input: BoxStatusInput) {
+    return pubSub.asyncIterator('boxesToTransportPosition');
+  }
+
+  @Query(() => GroupBoxesToTransportType)
+  boxToTransport(@Args('warehouseId') warehouseId: string) {
+    const boxToTransport = this.warehousesService.boxToTransport(warehouseId);
+    console.log(boxToTransport);
+
+    return {
+      warehouseId: boxToTransport.warehouseId,
+      boxes: boxToTransport.boxes,
+    };
+  }
+
   @Query(() => WarehouseType)
   async putBoxIntoWarehouse(
     @Args('putBoxIntoWarehouseInput')
@@ -83,13 +103,12 @@ export class WarehousesResolver {
       await this.warehousesService.getFreeWarehouseByWarehouseGroupId(
         putBoxIntoWarehouseInput.warehouseGroupId,
       );
-    console.log(putBoxIntoWarehouseInput);
-    this.warehousesService.putBoxIntoWarehouse(
-      freeWarehouse._id.toString(),
-      putBoxIntoWarehouseInput.boxId,
-      putBoxIntoWarehouseInput.seconds,
-    );
-
+    // '6182bd69d3e985b09988f8ed'
+    this.warehousesService.addToQueue(freeWarehouse._id.toString(), {
+      name: 'loadBox',
+      boxId: putBoxIntoWarehouseInput.boxId,
+      seconds: putBoxIntoWarehouseInput.seconds,
+    });
     return freeWarehouse;
   }
 }
