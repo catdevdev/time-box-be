@@ -18,8 +18,6 @@ type Action =
     }
   | {
       name: 'unload';
-      positionFrom: Vector3;
-      positionTo: Vector3;
       boxId: string;
     };
 
@@ -86,9 +84,15 @@ export class WarehousesService {
     warehouseId: string,
     boxId: string,
     seconds: number,
-    incomingBoxPosition: Vector3,
   ) => {
     const warehouse = await this.findByIDWarehouse(warehouseId);
+    const incomingBoxPosition = {
+      x: randomInt(-4, 4),
+      y: 0.2,
+      z: randomInt(3, 5),
+    };
+
+    this.addBoxToTransport(warehouseId, boxId, incomingBoxPosition);
 
     const busyPlacements: number[] = [];
     warehouse.boxes.map(({ placement }) => {
@@ -137,24 +141,30 @@ export class WarehousesService {
     await this.goToStartedPositionFromPlacementPosition(warehouseId);
   };
 
-  unloadBoxFromWarehouse = async (
+  public unloadBoxFromWarehouse = async (
     warehouseId: string,
-    placementIndex: number,
+    boxId: string,
+    boxPlacementIndex: number,
   ) => {
-    const boxPositionOutside: Vector3 = {
-      x: -4,
-      y: this.startedPosition.y,
-      z: 5,
+    const boxPositionOutside = {
+      x: randomInt(-4, 4),
+      y: 0.2,
+      z: randomInt(3, 5),
     };
     await this.goToPlacementPositionFromStartedPosition(
       warehouseId,
-      placementIndex,
+      boxPlacementIndex,
     );
+    this.removeBoxToTransport(warehouseId, boxId);
+    this.loadBoxOnSubstrate(warehouseId);
     await this.goToStartedPositionFromPlacementPosition(warehouseId);
     await this.goToOusideBoxFromStartedPosition(
       warehouseId,
       boxPositionOutside,
     );
+    await this.boxesService.unloadBox(boxId);
+    this.unloadBoxFromSubstrate(warehouseId);
+    this.addBoxToTransport(warehouseId, boxId, boxPositionOutside);
     await this.goToStartedPositionFromOusideBox(warehouseId);
   };
 
@@ -163,9 +173,13 @@ export class WarehousesService {
       .findById(warehouseId)
       .populate('boxes')
       .exec();
-    const positions = result.boxes.map((el) => {
-      return positionsPlacements[el.placement];
+    const positions = result.boxes.map((box) => {
+      return {
+        boxId: box._id,
+        position: positionsPlacements[box.placement].position,
+      };
     });
+
     // const a = positionsPlacements[result.boxes.]
 
     return positions;
@@ -252,22 +266,15 @@ export class WarehousesService {
     const warehouseQueue = this.warehouseQueues.find((warehouseQueue) => {
       return warehouseQueue.warehouseId === warehouseId;
     });
-    const incomingBoxPosition = {
-      x: randomInt(-4, 4),
-      y: 0.2,
-      z: randomInt(3, 5),
-    };
+
     warehouseQueue.actions.push(action);
-    this.addBoxToTransport(warehouseId, action.boxId, incomingBoxPosition);
+
     if (warehouseQueue.isActive === false) {
-      this.performQueue(warehouseId, incomingBoxPosition);
+      this.performQueue(warehouseId);
     }
   };
 
-  private performQueue = async (
-    warehouseId: string,
-    incomingBoxPosition: Vector3,
-  ) => {
+  private performQueue = async (warehouseId: string) => {
     const warehouseQueue = this.warehouseQueues.find((warehouseQueue) => {
       return warehouseQueue.warehouseId === warehouseId;
     });
@@ -282,11 +289,20 @@ export class WarehousesService {
         warehouseQueue.warehouseId,
         warehouseQueue.actions[0].boxId,
         warehouseQueue.actions[0].seconds,
-        incomingBoxPosition,
+      );
+    }
+    if (warehouseQueue.actions[0].name === 'unload') {
+      const box = await this.boxesService.findBoxById(
+        warehouseQueue.actions[0].boxId,
+      );
+      await this.unloadBoxFromWarehouse(
+        warehouseQueue.warehouseId,
+        warehouseQueue.actions[0].boxId,
+        box.placement,
       );
     }
     warehouseQueue.actions.shift();
-    this.performQueue(warehouseId, incomingBoxPosition);
+    this.performQueue(warehouseId);
   };
 
   initTransportSubstrateInWarehouses = async () => {
@@ -474,7 +490,7 @@ export class WarehousesService {
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  public boxToTransport = (warehouseId: string) => {
+  public boxesToTransport = (warehouseId: string) => {
     const boxToTransport = this.boxesToTransportPositions.find(
       (boxToTransportPosition) => {
         return boxToTransportPosition.warehouseId === warehouseId;
@@ -494,27 +510,35 @@ export class WarehousesService {
       },
     );
     boxToTransport.boxes.push({ boxId, position });
+
+    const box = { warehouseId, boxId, position };
+    const action = { actionName: 'add', box };
     pubSub.publish('boxesToTransportPosition', {
-      boxesToTransportPosition: boxToTransport,
+      boxesToTransportPosition: action,
     });
   };
+
   private removeBoxToTransport = (warehouseId: string, boxId: string) => {
+    console.log('removeBoxToTransport');
+    const box = { warehouseId, boxId, position: null };
+    const action = { actionName: 'remove', box };
+
     const boxToTransport = this.boxesToTransportPositions.find(
       (boxToTransportPosition) => {
         return boxToTransportPosition.warehouseId === warehouseId;
       },
     );
-    const box = boxToTransport.boxes.find((box) => {
+    const boxToSave = boxToTransport.boxes.find((box) => {
       return box.boxId === boxId;
     });
 
-    const boxToDeleteIndex = boxToTransport.boxes.indexOf(box);
+    const boxToDeleteIndex = boxToTransport.boxes.indexOf(boxToSave);
     if (boxToDeleteIndex !== -1) {
       boxToTransport.boxes.splice(boxToDeleteIndex, 1);
     }
 
     pubSub.publish('boxesToTransportPosition', {
-      boxesToTransportPosition: boxToTransport,
+      boxesToTransportPosition: action,
     });
   };
 }

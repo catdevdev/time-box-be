@@ -13,6 +13,8 @@ export class PositionType {
 
 @ObjectType()
 export class BoxPositionType {
+  @Field()
+  boxId: string;
   @Field(() => PositionType)
   position: PositionType;
 }
@@ -30,8 +32,10 @@ export class TransportSubstrateType {
 }
 
 @ObjectType()
-export class BoxesType {
-  @Field(() => PositionType)
+export class BoxToTransportType {
+  @Field()
+  warehouseId: string;
+  @Field(() => PositionType, { nullable: true })
   position: PositionType;
   @Field()
   boxId: string;
@@ -40,7 +44,7 @@ export class BoxesType {
 @ObjectType()
 export class GroupBoxesToTransportType {
   @Field()
-  warehouseId: string;
-  @Field(() => [BoxesType])
-  boxes: BoxesType[];
+  actionName: string;
+  @Field(() => BoxToTransportType)
+  box: BoxToTransportType;
 }
