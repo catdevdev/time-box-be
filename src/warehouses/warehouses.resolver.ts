@@ -12,6 +12,7 @@ import {
   BoxStatusInput,
   MoveTransportInput,
   PutBoxIntoWarehouseInput,
+  UnloadBoxFromWarehouseInput,
 } from './inputs/warehouse.input';
 import { pubSub, WarehousesService } from './warehouses.service';
 
@@ -37,7 +38,21 @@ export class WarehousesResolver {
 
   @Query(() => [BoxPositionType])
   async boxesPosition(@Args('warehouseId') warehouseId: string) {
-    return this.warehousesService.getBoxesPosition(warehouseId);
+    const positions = [
+      ...(await this.warehousesService.getBoxesPosition(warehouseId)),
+      ...this.warehousesService
+        .boxesToTransport(warehouseId)
+        .boxes.map((box) => {
+          return {
+            boxId: box.boxId,
+            position: box.position,
+          };
+        }),
+    ];
+
+    console.log(positions);
+
+    return positions;
   }
 
   @Query(() => WarehouseType)
@@ -74,7 +89,7 @@ export class WarehousesResolver {
   @Subscription(() => GroupBoxesToTransportType, {
     filter: (payload, variables) => {
       return (
-        payload.boxesToTransportPosition.warehouseId ===
+        payload.boxesToTransportPosition.box.warehouseId ===
         variables.input.warehouseId
       );
     },
@@ -85,7 +100,7 @@ export class WarehousesResolver {
 
   @Query(() => GroupBoxesToTransportType)
   boxToTransport(@Args('warehouseId') warehouseId: string) {
-    const boxToTransport = this.warehousesService.boxToTransport(warehouseId);
+    const boxToTransport = this.warehousesService.boxesToTransport(warehouseId);
     console.log(boxToTransport);
 
     return {
@@ -110,5 +125,20 @@ export class WarehousesResolver {
       seconds: putBoxIntoWarehouseInput.seconds,
     });
     return freeWarehouse;
+  }
+
+  @Query(() => WarehouseType)
+  async unloadBoxFromWarehouse(
+    @Args('unloadBoxFromWarehouseInput')
+    unloadBoxFromWarehouseInput: UnloadBoxFromWarehouseInput,
+  ) {
+    this.warehousesService.addToQueue(unloadBoxFromWarehouseInput.warehouseId, {
+      name: 'unload',
+      boxId: unloadBoxFromWarehouseInput.boxId,
+    });
+    const warehouse = await this.warehousesService.findByIDWarehouse(
+      unloadBoxFromWarehouseInput.warehouseId,
+    );
+    return warehouse;
   }
 }

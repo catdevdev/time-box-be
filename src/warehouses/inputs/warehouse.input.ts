@@ -27,3 +27,11 @@ export class PutBoxIntoWarehouseInput {
   @Field()
   seconds: number;
 }
+
+@InputType()
+export class UnloadBoxFromWarehouseInput {
+  @Field()
+  warehouseId: string;
+  @Field()
+  boxId: string;
+}

@@ -19,6 +19,8 @@ export class Box {
   @Prop() imageIds: string[];
   @Prop() notes: string[];
   @Prop() dateWhenCanBeOpened: Date;
+  @Prop() isCanBeOpened: boolean;
+  @Prop() isOpened: boolean;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Warehouse.name })
   warehouse: Warehouse;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })

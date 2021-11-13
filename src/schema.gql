@@ -51,6 +51,7 @@ type PositionType {
 }
 
 type BoxPositionType {
+  boxId: String!
   position: PositionType!
 }
 
@@ -61,14 +62,15 @@ type TransportSubstrateType {
   speed: Float!
 }
 
-type BoxesType {
-  position: PositionType!
+type BoxToTransportType {
+  warehouseId: String!
+  position: PositionType
   boxId: String!
 }
 
 type GroupBoxesToTransportType {
-  warehouseId: String!
-  boxes: [BoxesType!]!
+  actionName: String!
+  box: BoxToTransportType!
 }
 
 type Query {
@@ -81,6 +83,7 @@ type Query {
   transportSubstratePosition(warehouseId: String!): TransportSubstrateType!
   boxToTransport(warehouseId: String!): GroupBoxesToTransportType!
   putBoxIntoWarehouse(putBoxIntoWarehouseInput: PutBoxIntoWarehouseInput!): WarehouseType!
+  unloadBoxFromWarehouse(unloadBoxFromWarehouseInput: UnloadBoxFromWarehouseInput!): WarehouseType!
   users: [UserType!]!
   me(boxId: String): UserType!
   warehouseGroups: [WarehouseGroupType!]!
@@ -91,6 +94,11 @@ input PutBoxIntoWarehouseInput {
   warehouseGroupId: String!
   boxId: String!
   seconds: Float!
+}
+
+input UnloadBoxFromWarehouseInput {
+  warehouseId: String!
+  boxId: String!
 }
 
 type Mutation {

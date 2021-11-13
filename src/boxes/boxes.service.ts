@@ -30,8 +30,8 @@ export class BoxesService {
     return this.boxModel.find().populate('warehouse').populate('user').exec();
   }
 
-  async findByName(name: string): Promise<Box[]> {
-    return this.boxModel.find({ name }).exec();
+  async findBoxById(id: string): Promise<Box> {
+    return this.boxModel.findOne({ _id: id }).exec();
   }
 
   async addImageIntoBox(boxId: string, imageId: string): Promise<Box> {
@@ -67,5 +67,16 @@ export class BoxesService {
       { _id: boxId },
       { dateWhenCanBeOpened: date },
     );
+  }
+
+  async unloadBox(boxId: string): Promise<Box> {
+    return this.boxModel.findOneAndUpdate(
+      { _id: boxId },
+      { placement: null, warehouse: null, isCanBeOpened: true },
+    );
+  }
+
+  async openBox(boxId: string): Promise<Box> {
+    return this.boxModel.findOneAndUpdate({ _id: boxId }, { isOpened: true });
   }
 }
