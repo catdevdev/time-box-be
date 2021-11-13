@@ -34,6 +34,8 @@ type BoxType {
   imageIds: [String!]!
   notes: [String!]!
   dateWhenCanBeOpened: DateTime
+  isCanBeOpened: Boolean
+  isOpened: Boolean
   placement: Float
   warehouse: WarehouseType
   user: UserType!
@@ -105,6 +107,7 @@ type Mutation {
   createBox(input: BoxInput!): BoxType!
   addPlacementForBox(input: AddPlacementForBoxInput!): BoxType!
   addNoteIntoBox(input: AddNoteIntoBoxInput!): BoxType!
+  openBox(boxId: String!): BoxType!
   createWarehouse(warehouseId: String!): WarehouseType!
   createUser(input: UserInput!): UserType!
   createWarehousesGroup(warehouseGroupInput: WarehouseGroupInput!): WarehouseGroupType!

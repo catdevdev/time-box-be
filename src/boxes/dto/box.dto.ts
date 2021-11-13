@@ -15,6 +15,8 @@ export class BoxType {
   @Field(() => [String]) imageIds: string[];
   @Field(() => [String]) notes: string[];
   @Field({ nullable: true }) dateWhenCanBeOpened: Date;
+  @Field({ nullable: true }) isCanBeOpened: boolean;
+  @Field({ nullable: true }) isOpened: boolean;
   @Field({ nullable: true }) placement: number;
   @Field(() => WarehouseType, { nullable: true }) warehouse: WarehouseType;
   @Field(() => UserType) user: UserType;
