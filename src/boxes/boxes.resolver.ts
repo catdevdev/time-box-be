@@ -46,4 +46,9 @@ export class BoxesResolver {
   async addNoteIntoBox(@Args('input') input: AddNoteIntoBoxInput) {
     return this.boxesService.addNoteIntoBox(input.boxId, input.note);
   }
+
+  @Mutation(() => BoxType)
+  async openBox(@Args('boxId') boxId: string) {
+    return this.boxesService.openBox(boxId);
+  }
 }
