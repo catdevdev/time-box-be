@@ -77,6 +77,7 @@ type GroupBoxesToTransportType {
 
 type Query {
   boxes: [BoxType!]!
+  boxById(boxId: String!): BoxType!
   warehouses: [WarehouseType!]!
   warehouse(id: String!): [WarehouseType!]!
   boxesPosition(warehouseId: String!): [BoxPositionType!]!

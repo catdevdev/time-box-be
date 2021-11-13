@@ -20,6 +20,11 @@ export class BoxesResolver {
     return this.boxesService.findAll();
   }
 
+  @Query(() => BoxType)
+  async boxById(@Args('boxId') boxId: string) {
+    return this.boxesService.findBoxById(boxId);
+  }
+
   @UseGuards(GqlAuthGuard)
   @Mutation(() => BoxType)
   async createBox(
