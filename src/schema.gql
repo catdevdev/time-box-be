@@ -4,8 +4,8 @@
 
 type UserType {
   id: ID!
+  role: String!
   username: String!
-  password: String!
   boxes: [BoxType!]!
 }
 

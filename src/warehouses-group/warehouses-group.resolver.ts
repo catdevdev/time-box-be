@@ -18,6 +18,7 @@ export class WarehouseGroupResolver {
   @Query(() => [WarehouseGroupType])
   async warehouseGroups() {
     return this.warehousesGroupService.findAllWarehouseGroups();
+    
   }
 
   @Query(() => WarehouseGroupType)

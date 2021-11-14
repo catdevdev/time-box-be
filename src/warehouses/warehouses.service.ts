@@ -200,8 +200,10 @@ export class WarehousesService {
   ): Promise<Warehouse> => {
     const warehouses = await this.findAllWarehouses();
     const warehousesByWarehouseGroup = warehouses.filter(
-      ({ warehouseGroup }) =>
-        warehouseGroup._id.toString() === warehouseGroupId,
+      ({ warehouseGroup }) => {
+        console.log(warehouseGroup);
+        warehouseGroup?._id.toString() === warehouseGroupId;
+      },
     );
 
     const freeWarehouse = shuffle(warehousesByWarehouseGroup).find(
@@ -209,6 +211,8 @@ export class WarehousesService {
         return warehouse.boxes.length < MAX_CAPACITY_WAREHOUSE;
       },
     );
+    console.log('freeWarehouse');
+    console.log(freeWarehouse);
     if (!freeWarehouse) {
       const createWarehousePromises = [];
       Array.from(Array(2)).forEach(() => {
@@ -218,13 +222,27 @@ export class WarehousesService {
         createWarehousePromises,
       );
       newWarehouses.forEach((warehouse) => {
-        this.addTransportSubstrate(warehouse._id.toString());
+        this.transportSubstratePositions.push({
+          warehouseId: warehouse._id.toString(),
+          position: this.startedPosition,
+          boxOnSubstrate: false,
+        });
+        this.warehouseQueues.push({
+          isActive: false,
+          warehouseId: warehouse._id.toString(),
+          actions: [],
+        });
+        this.boxesToTransportPositions.push({
+          warehouseId: warehouse._id.toString(),
+          boxes: [],
+        });
       });
       const warehouses = await this.findAllWarehouses();
       const warehousesByWarehouseGroup = warehouses.filter(
         ({ warehouseGroup }) =>
-          warehouseGroup._id.toString() === warehouseGroupId,
+          warehouseGroup?._id.toString() === warehouseGroupId,
       );
+
       return shuffle(warehousesByWarehouseGroup).find((warehouse) => {
         return warehouse.boxes.length < MAX_CAPACITY_WAREHOUSE;
       });
