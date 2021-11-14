@@ -8,6 +8,7 @@ export type UsersDocument = User & Document;
 export class User {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
+  @Prop() role: string;
   @Prop() username: string;
   @Prop() password: string;
 }

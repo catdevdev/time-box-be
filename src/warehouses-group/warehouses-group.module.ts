@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { WarehousesModule } from 'src/warehouses/warehouses.module';
+import { WarehousesService } from 'src/warehouses/warehouses.service';
 import {
   WarehouseGroup,
   WarehouseGroupSchema,
@@ -12,6 +14,7 @@ import { WarehousesGroupService } from './warehouses-group.service';
     MongooseModule.forFeature([
       { name: WarehouseGroup.name, schema: WarehouseGroupSchema },
     ]),
+    WarehousesModule,
   ],
   providers: [WarehouseGroupResolver, WarehousesGroupService],
 })

@@ -6,8 +6,8 @@ export class UserType {
   @Field(() => ID)
   id: string;
   @Field()
-  username: string;
+  role: string;
   @Field()
-  password: string;
+  username: string;
   @Field(() => [BoxType]) boxes: BoxType[];
 }

@@ -10,8 +10,9 @@ import { BoxesModule } from 'src/boxes/boxes.module';
     MongooseModule.forFeature([
       { name: Warehouse.name, schema: WarehouseSchema },
     ]),
-    BoxesModule
+    BoxesModule,
   ],
   providers: [WarehousesResolver, WarehousesService],
+  exports: [WarehousesService]
 })
 export class WarehousesModule {}

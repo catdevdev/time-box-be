@@ -15,7 +15,7 @@ export class UsersService {
   ) {}
 
   async create(userInput: UserInput): Promise<User> {
-    const createdUser = new this.userModel(userInput);
+    const createdUser = new this.userModel({ ...userInput, role: 'user' });
     return createdUser.save();
   }
 
