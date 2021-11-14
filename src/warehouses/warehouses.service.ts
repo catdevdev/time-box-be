@@ -202,9 +202,15 @@ export class WarehousesService {
     const warehousesByWarehouseGroup = warehouses.filter(
       ({ warehouseGroup }) => {
         console.log(warehouseGroup);
-        warehouseGroup?._id.toString() === warehouseGroupId;
+        return warehouseGroup._id.toString() === warehouseGroupId;
       },
     );
+    console.log('warehouseGroupId');
+    console.log(warehouseGroupId);
+    console.log('warehouses');
+    console.log(warehouses);
+    console.log('warehousesByWarehouseGroup');
+    console.log(warehousesByWarehouseGroup);
 
     const freeWarehouse = shuffle(warehousesByWarehouseGroup).find(
       (warehouse) => {
@@ -240,7 +246,7 @@ export class WarehousesService {
       const warehouses = await this.findAllWarehouses();
       const warehousesByWarehouseGroup = warehouses.filter(
         ({ warehouseGroup }) =>
-          warehouseGroup?._id.toString() === warehouseGroupId,
+          warehouseGroup._id.toString() === warehouseGroupId,
       );
 
       return shuffle(warehousesByWarehouseGroup).find((warehouse) => {
@@ -360,7 +366,7 @@ export class WarehousesService {
   };
 
   private moveTransport = (warehouseId: string, to: Vector3) => {
-    const speed = 1;
+    const speed = 0.5;
 
     const {
       x: transportSubstrateX,
