@@ -366,7 +366,7 @@ export class WarehousesService {
   };
 
   private moveTransport = (warehouseId: string, to: Vector3) => {
-    const speed = 0.5;
+    const speed = 0.8;
 
     const {
       x: transportSubstrateX,
