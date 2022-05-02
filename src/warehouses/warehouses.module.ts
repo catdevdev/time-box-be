@@ -13,6 +13,6 @@ import { BoxesModule } from 'src/boxes/boxes.module';
     BoxesModule,
   ],
   providers: [WarehousesResolver, WarehousesService],
-  exports: [WarehousesService]
+  exports: [WarehousesService],
 })
 export class WarehousesModule {}
